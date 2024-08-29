@@ -7,8 +7,7 @@ frontend:
 backend:
   image:
     repository: uthycloud/dream-vacations-backend
-    tag: v1.0.0  # This will be overridden by the workflow
-  replicaCount: 1
+    tag: latest
 
 database:
   host: postgresql.default.svc.cluster.local

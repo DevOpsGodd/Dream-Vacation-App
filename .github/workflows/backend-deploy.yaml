@@ -20,12 +20,12 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:${{ github.sha }} backend/
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:${{ github.sha }}
+        SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:$SHORT_SHA backend/
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:$SHORT_SHA
+
     
-    - name: List directory contents
-      run: |
-        ls -R ./helm
     - name: Rename chart.yaml to Chart.yaml
       run: mv ./helm/dream-vacations/chart.yaml ./helm/dream-vacations/Chart.yaml  
 
@@ -47,7 +47,7 @@ jobs:
         helm upgrade --install dream-vacations ./helm/dream-vacations \
           --namespace $NAMESPACE \
           --set backend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend \
-          --set backend.image.tag=${{ github.sha }} \
+          --set backend.image.tag=latest \
           --set frontend.enabled=true \
           --set database.enabled=true
 
