@@ -23,6 +23,9 @@ jobs:
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:${{ github.sha }} frontend/
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:${{ github.sha }}
 
+    - name: List directory contents
+      run: |
+        ls -R ./helm
     - name: Deploy to Minikube
       run: |
         eval $(minikube docker-env)
