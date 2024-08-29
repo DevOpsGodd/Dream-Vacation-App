@@ -9,9 +9,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    strategy:
-      matrix:
-        environment: [dev, staging, prod]
     steps:
     - uses: actions/checkout@v2
 
@@ -23,21 +20,35 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:${{ github.sha }}-${{ matrix.environment }} backend/
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:${{ github.sha }}-${{ matrix.environment }}
-
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:${{ github.sha }} backend/
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:${{ github.sha }}
+    
     - name: Deploy to Minikube
       run: |
-        minikube status
         eval $(minikube docker-env)
-        helm upgrade --install dream-vacations-backend ./helm/dream-vacations \
-          --namespace ${{ matrix.environment }} \
-          --set backend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend \
-          --set backend.image.tag=${{ github.sha }}-${{ matrix.environment }} \
-          --set frontend.enabled=false \
-          --set database.name=${{ matrix.environment }}_db
 
-    - name: Verify deployment
+        if [[ $GITHUB_REF_NAME == 'develop' ]]; then
+          NAMESPACE='dev';
+        elif [[ $GITHUB_REF_NAME == 'staging' ]]; then
+          NAMESPACE='staging';
+        elif [[ $GITHUB_REF_NAME == 'main' ]]; then
+          NAMESPACE='prod';
+        else
+          echo "Unknown branch, deployment skipped.";
+          exit 1;
+        fi
+
+        helm upgrade --install dream-vacations-backend ./helm/dream-vacations \
+          --namespace $NAMESPACE \
+          --set frontend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend \
+          --set frontend.image.tag=${{ github.sha }} \
+          --set backend.enabled=false \
+          --set database.enabled=false
+
+    - name: Cleanup old deployments
       run: |
-        kubectl rollout status deployment/dream-vacations-backend -n ${{ matrix.environment }}
-        kubectl get services -n ${{ matrix.environment }}
+        # Keep only the 3 most recent deployments
+        helm list -q | sort -r | tail -n +4 | xargs -r helm uninstall
+    
+        # Remove dangling images
+        docker image prune - 
