@@ -66,8 +66,8 @@ jobs:
           echo "Unknown branch, deployment skipped.";
           exit 1;
         fi
-        
-        kubectl rollout status deployment/dream-vacations-frontend -n $NAMESPACE
+
+        kubectl get deployment -n $NAMESPACE
         kubectl get services -n $NAMESPACE
     
     - name: Cleanup old deployments

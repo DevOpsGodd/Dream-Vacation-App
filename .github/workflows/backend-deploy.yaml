@@ -65,8 +65,8 @@ jobs:
           echo "Unknown branch, deployment skipped.";
           exit 1;
         fi
-        
-        kubectl rollout status deployment -n $NAMESPACE
+
+        kubectl get deployment -n $NAMESPACE
         kubectl get services -n $NAMESPACE
 
     - name: Cleanup old deployments
