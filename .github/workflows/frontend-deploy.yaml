@@ -4,7 +4,7 @@ on:
     branches: [ main, develop, staging ]
     paths:
       - 'frontend/**'
-      - '.github/workflows/frontend-pipeline.yml'
+      - '.github/workflows/frontend-deploy.yaml'
 
 jobs:
   build-and-deploy:
