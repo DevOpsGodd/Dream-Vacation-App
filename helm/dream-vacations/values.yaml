@@ -1,0 +1,15 @@
+frontend:
+  image:
+    repository: uthycloud/dream-vacations-frontend
+    tag: latest
+  replicaCount: 1
+
+backend:
+  image:
+    repository: uthycloud/dream-vacations-backend
+    tag: latest
+  replicaCount: 1
+
+database:
+  host: postgresql.default.svc.cluster.local
+  name: dev_db  # This will be overridden in the workflow

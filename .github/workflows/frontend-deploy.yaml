@@ -1,0 +1,51 @@
+name: Frontend CI/CD
+on:
+  push:
+    branches: [ main, develop, staging ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-pipeline.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        environment: [dev, staging, prod]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:${{ github.sha }}-${{ matrix.environment }} frontend/
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:${{ github.sha }}-${{ matrix.environment }}
+
+    - name: Deploy to Minikube
+      run: |
+        minikube status
+        eval $(minikube docker-env)
+        helm upgrade --install dream-vacations-frontend ./helm/dream-vacations \
+          --namespace ${{ matrix.environment }} \
+          --set frontend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend \
+          --set frontend.image.tag=${{ github.sha }}-${{ matrix.environment }} \
+          --set backend.enabled=false \
+          --set database.enabled=false
+
+    - name: Verify deployment
+      run: |
+        kubectl rollout status deployment/dream-vacations-frontend -n ${{ matrix.environment }}
+        kubectl get services -n ${{ matrix.environment }}
+
+    - name: Cleanup old deployments
+      run: |
+        # Keep only the 3 most recent deployments
+        helm list -q | sort -r | tail -n +4 | xargs -r helm uninstall
+    
+        # Remove dangling images
+        docker image prune -  
