@@ -26,6 +26,10 @@ jobs:
     - name: List directory contents
       run: |
         ls -R ./helm
+
+    - name: Rename chart.yaml to Chart.yaml
+      run: mv ./helm/dream-vacations/chart.yaml ./helm/dream-vacations/Chart.yaml
+    
     - name: Deploy to Minikube
       run: |
         eval $(minikube docker-env)
