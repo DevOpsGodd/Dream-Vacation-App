@@ -54,6 +54,19 @@ jobs:
     
     - name: Verify deployment
       run: |
+        eval $(minikube docker-env)
+
+        if [[ $GITHUB_REF_NAME == 'develop' ]]; then
+          NAMESPACE='dev';
+        elif [[ $GITHUB_REF_NAME == 'staging' ]]; then
+          NAMESPACE='staging';
+        elif [[ $GITHUB_REF_NAME == 'main' ]]; then
+          NAMESPACE='prod';
+        else
+          echo "Unknown branch, deployment skipped.";
+          exit 1;
+        fi
+        
         kubectl rollout status deployment/dream-vacations-frontend -n $NAMESPACE
         kubectl get services -n $NAMESPACE
     
