@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dream-vacations.fullname" . }}-frontend
+  name: dream-vacations-frontend  # Static name
   labels:
     app: frontend
 spec:
@@ -17,8 +17,9 @@ spec:
       containers:
       - name: frontend
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
         env:
         - name: BACKEND_URL
-          value: "http://{{ include "dream-vacations.fullname" . }}-backend"
+          value: "http://dream-vacations-backend"

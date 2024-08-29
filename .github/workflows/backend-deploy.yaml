@@ -44,12 +44,12 @@ jobs:
           exit 1;
         fi
 
-        helm upgrade --install dream-vacations-backend ./helm/dream-vacations \
+        helm upgrade --install dream-vacations ./helm/dream-vacations \
           --namespace $NAMESPACE \
-          --set frontend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend \
-          --set frontend.image.tag=${{ github.sha }} \
-          --set backend.enabled=false \
-          --set database.enabled=false
+          --set backend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend \
+          --set backend.image.tag=${{ github.sha }} \
+          --set frontend.enabled=true \
+          --set database.enabled=true
 
     - name: Verify deployment
       run: |
@@ -69,10 +69,7 @@ jobs:
         kubectl get deployment -n $NAMESPACE
         kubectl get services -n $NAMESPACE
 
-    - name: Cleanup old deployments
+    - name: Cleanup old images
       run: |
-        # Keep only the 3 most recent deployments
-        helm list -q | sort -r | tail -n +4 | xargs -r helm uninstall
-    
         # Remove dangling images
-        docker image prune -f 
+        docker image prune -f
