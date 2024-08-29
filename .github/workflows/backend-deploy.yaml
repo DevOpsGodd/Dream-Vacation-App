@@ -28,7 +28,7 @@ jobs:
         ls -R ./helm
     - name: Rename chart.yaml to Chart.yaml
       run: mv ./helm/dream-vacations/chart.yaml ./helm/dream-vacations/Chart.yaml  
-        
+
     - name: Deploy to Minikube
       run: |
         eval $(minikube docker-env)
@@ -51,10 +51,15 @@ jobs:
           --set backend.enabled=false \
           --set database.enabled=false
 
+    - name: Verify deployment
+      run: |
+        kubectl rollout status deployment/dream-vacations-backend -n $NAMESPACE
+        kubectl get services -n $NAMESPACE
+
     - name: Cleanup old deployments
       run: |
         # Keep only the 3 most recent deployments
         helm list -q | sort -r | tail -n +4 | xargs -r helm uninstall
     
         # Remove dangling images
-        docker image prune - 
+        docker image prune -f 

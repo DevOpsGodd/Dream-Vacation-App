@@ -51,11 +51,16 @@ jobs:
           --set frontend.image.tag=${{ github.sha }} \
           --set backend.enabled=false \
           --set database.enabled=false
-
+    
+    - name: Verify deployment
+      run: |
+        kubectl rollout status deployment/dream-vacations-frontend -n $NAMESPACE
+        kubectl get services -n $NAMESPACE
+    
     - name: Cleanup old deployments
       run: |
         # Keep only the 3 most recent deployments
         helm list -q | sort -r | tail -n +4 | xargs -r helm uninstall
     
         # Remove dangling images
-        docker image prune -  
+        docker image prune -f 
