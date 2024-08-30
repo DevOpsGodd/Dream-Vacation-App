@@ -49,7 +49,7 @@ jobs:
           --namespace $NAMESPACE \
           --set frontend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend \
           --set frontend.image.tag=${{ github.sha }} \
-          --set backend.enabled=true \
+          --set backend.enabled=false \
           --set database.enabled=true
 
     - name: Verify deployment
