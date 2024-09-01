@@ -4,7 +4,7 @@ FROM node:18-alpine as build
 # Set environment variable
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
-# Set the working directory in the container
+# Set the working directory in the containersss
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
