@@ -22,4 +22,4 @@ spec:
         - containerPort: 80
         env:
         - name: BACKEND_URL
-          value: "http://dream-vacations-backend"
+          value: "http://dream-vacations-backend-svc"
