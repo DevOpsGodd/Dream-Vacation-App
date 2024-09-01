@@ -20,8 +20,11 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:${{ github.sha }} frontend/
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:${{ github.sha }}
+        SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:$SHORT_SHA frontend/
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend:$SHORT_SHA
+
 
     - name: List directory contents
       run: |
@@ -48,7 +51,7 @@ jobs:
         helm upgrade --install dream-vacations ./helm/dream-vacations \
           --namespace $NAMESPACE \
           --set frontend.image.repository=${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-frontend \
-          --set frontend.image.tag=${{ github.sha }} \
+          --set frontend.image.tag=latest \
           --set backend.enabled=false \
           --set database.enabled=true
 

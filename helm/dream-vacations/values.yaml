@@ -1,7 +1,7 @@
 frontend:
   image:
     repository: uthycloud/dream-vacations-frontend
-    tag: v1.0.0  # This will be overridden by the workflow
+    tag: latest  # This will be overridden by the workflow
   replicaCount: 1
 
 backend:
