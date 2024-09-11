@@ -82,6 +82,10 @@ app.delete('/api/destinations/:id', async (req, res) => {
   }
 });
 
+app.get('/', async (req, res) => {
+  res.status(200).send("Server is working");
+});
+
 
 
 app.listen(port, () => {
