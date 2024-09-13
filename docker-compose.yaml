@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+ frontend:
+   build: ./frontend
+   ports:
+     - "3000:80"
+   environment:
+     - REACT_APP_API_URL=http://localhost:3001
+   depends_on:
+     - backend
+
+
+ backend:
+   build: ./backend
+   ports:
+     - "3001:3001"
+   environment:
+     - DATABASE_URL=postgresql://dreamuser:password@postgres:5432/dreamvacations
+     - COUNTRIES_API_BASE_URL=https://restcountries.com/v3.1
+   depends_on:
+     - postgres
+
+
+ postgres:
+   image: postgres:13
+   environment:
+     POSTGRES_USER: dreamuser
+     POSTGRES_PASSWORD: password
+     POSTGRES_DB: dreamvacations
+   ports:
+     - "5432:5432"
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+
+
+volumes:
+ postgres_data:
+
+
