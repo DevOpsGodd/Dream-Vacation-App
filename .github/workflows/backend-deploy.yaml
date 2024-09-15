@@ -25,6 +25,6 @@ jobs:
       - name: Build and push Docker image
         run: |
           SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:$SHORT_SHA backend/
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacations-backend:$SHORT_SHA
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_backend:$SHORT_SHA backend/
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_backend:$SHORT_SHA
