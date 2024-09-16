@@ -67,5 +67,5 @@ function App() {
     </div>
   );
 }
-
+//react app start dev server no port 3000 by default
 export default App;
