@@ -1,4 +1,4 @@
-name: Frontend Deployment
+name: Frontend CI/CD Deployment
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build-fe-application:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
