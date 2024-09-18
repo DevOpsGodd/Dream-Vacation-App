@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.databaseconfigMapName }}
+  name: {{ .Values.database.configMapName }}
 data:
   DATABASE_NAME: dreamvacations
   DATABASE_USERNAME: {{ .Values.env.configMap.POSTGRES_USER }}

@@ -16,37 +16,37 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: {{ .Values.image.database.repository }}:{{ .Values.image.database.tag }}
+          image: {{ .Values.database.repository }}:{{ .Values.database.tag }}
           ports:
             - containerPort: 5432
           env:
             - name: DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Values.databaseconfigMapName }}
+                  name: {{ .Values.database.configMapName }}
                   key: DATABASE_HOST
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Values.databaseconfigMapName }}
+                  name: {{ .Values.database.configMapName }}
                   key: DATABASE_NAME
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Values.databaseconfigMapName }}
+                  name: {{ .Values.database.configMapName }}
                   key: DATABASE_USERNAME
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.databasesecretName }}
+                  name: {{ .Values.database.secretName }}
                   key: DATABASE_PASSWORD
           resources:
             requests:
-              memory: {{ .Values.resources.database.requests.memory }}
-              cpu: {{ .Values.resources.database.requests.cpu }}
+              memory: {{ .Values.database.requests.memory }}
+              cpu: {{ .Values.database.requests.cpu }}
             limits:
-              memory: {{ .Values.resources.database.limits.memory }}
-              cpu: {{ .Values.resources.database.limits.cpu }}
+              memory: {{ .Values.database.limits.memory }}
+              cpu: {{ .Values.database.limits.cpu }}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-persistent-storage

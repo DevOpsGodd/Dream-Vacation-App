@@ -9,5 +9,5 @@ spec:
     app: backend
   ports:
     - protocol: TCP
-      port: {{ .Values.service.backendPort }}
-      targetPort: {{ .Values.service.backendTargetPort }}
+      port: {{ .Values.backend.backendPort }}
+      targetPort: {{ .Values.backend.backendTargetPort }}

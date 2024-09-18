@@ -1,47 +1,45 @@
 replicaCount: 1
 
-image:
-  backend:
-    repository: obusorezekiel/dream-vacation-app_backend
-    tag: latest
-    pullPolicy: Always
-  frontend:
-    repository: obusorezekiel/dream-vacation-app_frontend
-    tag: latest
-    pullPolicy: IfNotPresent
-  database:
-    repository: postgres
-    tag: latest
-    pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP # Can be LoadBalancer or NodePort
+backend:
+  repository: obusorezekiel/dream-vacation-app_backend
+  tag: latest
+  pullPolicy: Always
   backendPort: 80
   backendTargetPort: 3001
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "500m"
+  configMapName: backend-config
+  secretName: backend-secret
+
+frontend:
+  repository: obusorezekiel/dream-vacation-app_frontend
+  tag: latest
+  pullPolicy: IfNotPresent
   frontendPort: 80
   frontendTargetPort: 80
+  type: LoadBalancer
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+database:
+  repository: postgres
+  tag: latest
+  pullPolicy: IfNotPresent
   databasePort: 5432
   databaseTargetPort: 5432
-
-resources:
-  backend:
-    requests:
-      memory: "512Mi"
-      cpu: "250m"
-    limits:
-      memory: "1Gi"
-      cpu: "500m"
-  frontend:
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
-  database:
-    requests:
-      memory: "512Mi"
-      cpu: "250m"
-    limits:
-      memory: "1Gi"
-      cpu: "500m"
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "500m"
+  configMapName: db-config
+  secretName: db-secrets
 
 env:
   configMap:
@@ -50,15 +48,9 @@ env:
     POSTGRES_HOST: "postgres-db"
     POSTGRES_PORT: "5432"
   secret:
-    POSTGRES_PASSWORD: "your-secure-password"
+    POSTGRES_PASSWORD: "password"
   frontend:
     REACT_APP_API_URL: "http://dream-vacations-backend-svc"
-
-configMapName: backend-config
-secretName: backend-secret
-
-databaseconfigMapName: db-config
-databasesecretName: db-secrets
 
 persistentVolumeClaim:
   name: postgres-pv-claim

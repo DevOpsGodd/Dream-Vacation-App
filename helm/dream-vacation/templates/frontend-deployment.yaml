@@ -17,13 +17,13 @@ spec:
       containers:
       - name: frontend
         image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
-        imagePullPolicy: {{ .Values.image.frontend.pullPolicy }}
+        imagePullPolicy: {{ .Values.frontend.pullPolicy }}
         resources:
           limits:
             memory: "{{ .Values.resources.frontend.limits.memory }}"
             cpu: "{{ .Values.resources.frontend.limits.cpu }}"
         ports:
-        - containerPort: {{ .Values.service.frontendPort }}
+        - containerPort: {{ .Values.frontend.frontendPort }}
         env:
         - name: REACT_APP_API_URL
           value: "{{ .Values.env.frontend.REACT_APP_API_URL }}"
