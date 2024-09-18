@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: backend
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.image.backend.repository }}:{{ .Values.image.backend.tag }}"
+          imagePullPolicy: {{ .Values.image.backend.pullPolicy }}
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -51,7 +51,7 @@ spec:
           resources:
             requests:
               memory: {{ .Values.resources.backend.requests.memory }}
-              cpu: {{ .Values.resources.requests.cpu }}
+              cpu: {{ .Values.resources.backend.requests.cpu }}
             limits:
               memory: {{ .Values.resources.backend.limits.memory }}
               cpu: {{ .Values.resources.backend.limits.cpu }}
