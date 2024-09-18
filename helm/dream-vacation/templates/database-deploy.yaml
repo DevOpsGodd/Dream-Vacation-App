@@ -33,7 +33,7 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
-                  name: {{{ .Values.databaseconfigMapName }}
+                  name: {{ .Values.databaseconfigMapName }}
                   key: DATABASE_USERNAME
             - name: POSTGRES_PASSWORD
               valueFrom:
