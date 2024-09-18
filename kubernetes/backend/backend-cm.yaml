@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: backend-config
 data:
-  POSTGRES_HOST: "postgres-service"
+  POSTGRES_HOST: "postgres-db"
   POSTGRES_PORT: "5432"
   POSTGRES_DB: "dreamvacations"
   POSTGRES_USER: "dreamuser"

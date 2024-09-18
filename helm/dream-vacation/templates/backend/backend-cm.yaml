@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMapName }}
+  labels:
+    app: backend
+data:
+  POSTGRES_HOST: "{{ .Values.env.configMap.POSTGRES_HOST }}"
+  POSTGRES_PORT: "{{ .Values.env.configMap.POSTGRES_PORT }}"
+  POSTGRES_DB: "{{ .Values.env.configMap.POSTGRES_DB }}"
+  POSTGRES_USER: "{{ .Values.env.configMap.POSTGRES_USER }}"

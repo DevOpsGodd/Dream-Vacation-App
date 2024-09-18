@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.image..database.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 5432
+          env:
+            - name: DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.databaseconfigMapName }}
+                  key: DATABASE_HOST
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.databaseconfigMapName }}
+                  key: DATABASE_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{{ .Values.databaseconfigMapName }}
+                  key: DATABASE_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.databasesecretName }}
+                  key: DATABASE_PASSWORD
+          resources:
+            requests:
+              memory: {{ .Values.resources.database.requests.memory }}
+              cpu: {{ .Values.resources.database.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.database.limits.memory }}
+              cpu: {{ .Values.resources.database.limits.cpu }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-persistent-storage
+      volumes:
+        - name: postgres-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistentVolumeClaim.name }}
