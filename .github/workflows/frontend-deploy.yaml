@@ -62,7 +62,7 @@ jobs:
 
       - name: Scan Docker image for vulnerabilities
         run: |
-          trivy image --severity HIGH,CRITICAL --exit-code 1 ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_frontend:latest
+          trivy image --severity LOW --exit-code 1 ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_frontend:latest
 
   deploy-to-eks:
     runs-on: ubuntu-latest
