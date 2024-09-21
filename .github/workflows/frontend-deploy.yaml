@@ -47,7 +47,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_frontend:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/dream-vacation-app_frontend:$SHORT_SHA
 
-  scan:
+  scan-image:
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -66,7 +66,7 @@ jobs:
 
   deploy-to-eks:
     runs-on: ubuntu-latest
-    needs: scan
+    needs: scan-image
     steps:
       - name: checkout-branch
         uses: actions/checkout@v2
