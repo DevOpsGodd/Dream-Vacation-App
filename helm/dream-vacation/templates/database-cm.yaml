@@ -1,3 +1,4 @@
+{{- if .Values.database.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,3 +7,4 @@ data:
   DATABASE_NAME: dreamvacations
   DATABASE_USERNAME: {{ .Values.env.configMap.POSTGRES_USER }}
   DATABASE_HOST: {{ .Values.env.configMap.POSTGRES_DB }}
+{{- end }}

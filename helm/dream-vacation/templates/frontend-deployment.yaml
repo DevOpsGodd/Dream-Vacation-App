@@ -1,7 +1,8 @@
+{{- if .Values.frontend.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dream-vacations-frontend
+  name: frontend
   labels:
     app: frontend
 spec:
@@ -27,3 +28,4 @@ spec:
         env:
         - name: REACT_APP_API_URL
           value: "{{ .Values.env.frontend.REACT_APP_API_URL }}"
+{{- end }}

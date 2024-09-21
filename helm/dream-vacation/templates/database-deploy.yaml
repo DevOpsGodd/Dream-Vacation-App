@@ -1,3 +1,4 @@
+{{- if .Values.database.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,4 +54,5 @@ spec:
       volumes:
         - name: postgres-persistent-storage
           persistentVolumeClaim:
-            claimName: {{ .Values.persistentVolumeClaim.name }}
+            claimName: {{ .Values.database.persistentVolumeClaim.name }}
+{{- end }}
