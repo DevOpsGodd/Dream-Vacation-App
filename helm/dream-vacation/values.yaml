@@ -1,6 +1,7 @@
 replicaCount: 1
 
 backend:
+  enabled: true
   repository: obusorezekiel/dream-vacation-app_backend
   tag: latest
   pullPolicy: Always
@@ -16,6 +17,7 @@ backend:
   secretName: backend-secret
 
 frontend:
+  enabled: true
   repository: obusorezekiel/dream-vacation-app_frontend
   tag: latest
   pullPolicy: IfNotPresent
@@ -27,6 +29,7 @@ frontend:
     cpu: "500m"
 
 database:
+  enabled: true
   repository: postgres
   tag: latest
   pullPolicy: IfNotPresent
@@ -40,6 +43,8 @@ database:
     cpu: "500m"
   configMapName: db-config
   secretName: db-secrets
+  persistentVolumeClaim:
+    name: postgres-pv-claim
 
 env:
   configMap:
@@ -51,6 +56,3 @@ env:
     POSTGRES_PASSWORD: "password"
   frontend:
     REACT_APP_API_URL: "http://dream-vacations-backend-svc"
-
-persistentVolumeClaim:
-  name: postgres-pv-claim
