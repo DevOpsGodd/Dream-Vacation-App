@@ -85,7 +85,6 @@ In this project, I achieved the following:
 
 ### 5. Security Enhancements
 - Implemented container image scanning in the CI pipeline to identify vulnerabilities.
-- Set up HTTPS using Let’s Encrypt to secure connections to the application.
 
 ---
 
